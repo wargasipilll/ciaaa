@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning Images</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .image {
+            position: relative;
+            width: 200px; /* Increased width */
+            height: 200px; /* Increased height */
+            background-size: cover; /* Ensure the image covers the element */
+            animation: spin 5s linear infinite; /* Slower spin */
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); } /* 3D spin effect */
+            100% { transform: rotateY(360deg); }
+        }
+
+        .spark {
+            position: absolute;
+            font-size: 20px; /* Size of the heart spark */
+            color: rgba(255, 192, 203, 0.8); /* Spark color */
+            pointer-events: none; /* Prevent interaction */
+            animation: sparkle 1s forwards; /* Sparkle animation */
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        button {
+            position: absolute;
+            bottom: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #ff4d4d;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #e60000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="image" id="image" style="background-image: url('file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/cia1.png');"></div>
+    <button id="tapButton">Tap</button>
+
+    <audio id="backgroundMusic" loop>
+        <source src="file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/Mighfar%20Suganda%20-%20Anti%20%20Hero%20X%20EternaLove%20(Lirik%20Terjemahan%20Indonesia).mp3" type="audio/mpeg"> <!-- Local audio file -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const images = [
+            'file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/cia1.png',
+            'file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/cia2.png',
+            'file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/cia3.png',
+            'file:///C:/Users/Desktop/Downloads/IIIVXLV/new/New%20folder/cia4.png'
+        ];
+
+        let currentImageIndex = 0;
+        let sparkleInterval;
+
+        document.getElementById("tapButton").addEventListener("click", function() {
+            let image = document.getElementById("image");
+            image.style.animation = "spin 5s linear infinite"; // Ensure the image spins
+            document.getElementById("backgroundMusic").play(); // Play the audio on tap
+
+            // Start generating sparkles continuously
+            sparkleInterval = setInterval(createSparkle, 300); // Generate sparkles every 300ms
+        });
+
+        function createSparkle() {
+            const sparkle = document.createElement("div");
+            sparkle.className = "spark";
+            sparkle.innerHTML = "♡"; // Heart shape character
+            document.body.appendChild(sparkle);
+
+            // Position the sparkle randomly on the screen
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+
+            // Remove sparkle after animation
+            sparkle.addEventListener('animationend', () => {
+                sparkle.remove();
+            });
+        }
+
+        // Stop generating sparkles when the heart is tapped again
+        document.getElementById("tapButton").addEventListener("dblclick", function() {
+            clearInterval(sparkleInterval); // Stop generating sparkles
+        });
+
+        setInterval(() => {
+            let image = document.getElementById("image");
+            image.style.backgroundImage = `url(${images[currentImageIndex]})`;
+            currentImageIndex = (currentImageIndex + 1) % images.length; // Cycle through images
+        }, 5000); // Change image every 5 seconds
+    </script>
+
+</body>
+</html>
