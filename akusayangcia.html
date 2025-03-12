@@ -15,6 +15,7 @@
             animation: gradientBG 8s ease infinite;
             margin: 0;
             overflow: hidden;
+            flex-direction: column;
         }
 
         @keyframes gradientBG {
@@ -29,6 +30,7 @@
             height: 200px;
             background-size: cover;
             animation: spin 5s linear infinite;
+            display: none; /* Hidden at first */
         }
 
         @keyframes spin {
@@ -51,27 +53,37 @@
             100% { transform: scale(1.5); opacity: 0; }
         }
 
+        /* Beautiful Button */
         button {
-            position: absolute;
-            bottom: 20px;
-            padding: 10px 20px;
-            font-size: 18px;
-            background: #ff4d4d;
+            padding: 12px 25px;
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
             border: none;
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(255, 65, 108, 0.4);
+            transition: all 0.3s ease;
+            outline: none;
+            margin-top: 20px;
         }
 
         button:hover {
-            background: #e60000;
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            box-shadow: 0 6px 15px rgba(255, 65, 108, 0.6);
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
     <div class="image" id="image" style="background-image: url('cia1.png');"></div>
-    <button id="tapButton">Tap</button>
+    <button id="tapButton">💖 Tap Me 💖</button>
 
     <audio id="backgroundMusic" loop>
         <source src="Mighfar Suganda - Anti  Hero X EternaLove (Lirik Terjemahan Indonesia).mp3" type="audio/mpeg">
@@ -82,12 +94,17 @@
         const images = ['cia1.png', 'cia2.png', 'cia3.png', 'cia4.png'];
         let currentImageIndex = 0;
         let sparkleInterval;
+        let imageVisible = false;
 
         document.getElementById("tapButton").addEventListener("click", function() {
             let image = document.getElementById("image");
             let audio = document.getElementById("backgroundMusic");
 
-            image.style.animation = "spin 5s linear infinite"; 
+            if (!imageVisible) {
+                image.style.display = "block"; // Show the image
+                image.style.animation = "spin 5s linear infinite";
+                imageVisible = true;
+            }
 
             if (audio.paused) {
                 audio.play().catch(error => console.log("Audio play failed: ", error));
